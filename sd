@@ -1,0 +1,19 @@
+import requests
+import json
+
+url = 'https://api.marquesconsult.com.br/v2/auth/login'
+
+payload = {'cpf': '11111111111', 'senha': '123456'}
+headers = {'content-type': 'application/json'}
+
+r = requests.post(url, data=json.dumps(payload), headers=headers)
+resposta = r.json()
+token = resposta['token']
+headers = {'Authorization': 'Bearer ' + token}
+
+
+url = 'https://api.marquesconsult.com.br/v2/esus/me/permissoes'
+r = requests.get(url, headers=headers)
+for permissao in r.json():
+    if permissao['tipo'] == 'ACESSO':
+        permissao_id = permissao['id']
